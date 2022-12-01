@@ -1,1 +1,1 @@
-def hello := "world"
+import Aoc2022.Day01
