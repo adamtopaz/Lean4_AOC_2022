@@ -10,3 +10,11 @@ def List.sum [Add α] [OfNat α (nat_lit 0)] : List α → α
 
 def Array.sum [Add α] [OfNat α (nat_lit 0)] : Array α → α :=
   fun L => L.toList.sum
+
+def Std.Queue.noDups (D : Queue α) := 
+  D.toArray.toList.Pairwise (· ≠ ·)
+
+instance (D : Std.Queue α) [DecidableRel ((· ≠ ·) : α → α → Prop)] : 
+  Decidable D.noDups := by
+  unfold Std.Queue.noDups
+  exact inferInstance

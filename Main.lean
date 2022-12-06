@@ -21,3 +21,7 @@ def main : IO Unit := do
   IO.println s!"Part 1: {← Day5.first_part}"
   IO.println s!"Part 2: {← Day5.second_part}"
   IO.println ""
+  IO.println "Day6:"
+  IO.println s!"Part 1: {← Day6.part 3}"
+  IO.println s!"Part 2: {← Day6.part 13}"
+  IO.println ""
