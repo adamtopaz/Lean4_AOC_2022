@@ -11,7 +11,9 @@ def input : FilePath := "/home/adam/Lean4-Projects/aoc2022/input_05"
 abbrev Game := HashMap Nat (List Char)
 
 def Game.add (G : Game) (c : Char) (i : Nat) : Game := 
-  G.insert i (c :: G.find! i)
+  match G.find? i with 
+  | none => G.insert i [c]
+  | some t => G.insert i (c :: t)
 
 def Game.pop (G : Game) (i : Nat) : Option Char × Game :=  
 match G.find! i with

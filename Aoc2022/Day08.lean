@@ -43,6 +43,30 @@ def Map.visible? (M : Map x y) (a : Fin x) (b : Fin y) : Bool :=
   xlt.foldl (· && ·) true || ylt.foldl (· && ·) true || 
     xgt.foldl (· && ·) true || ygt.foldl (· && ·) true 
 
+def List.untilNot (L : List α) (f : α → Bool) : List α :=
+match L with 
+| [] => []
+| (x :: xs) => if f x then x :: List.untilNot xs f else []
+
+def List.countUntil (L : List Nat) (h : Nat) : Nat := Id.run $ do 
+  let mut out : Nat := 0 
+  for i in L do 
+    out := out + 1
+    if i ≥ h then break
+  return out
+
+def Map.vizScore (M : Map x y) (a : Fin x) (b : Fin y) : Nat := 
+  let height := M.get a b
+  let xlt : Nat := Fin.lt a |>.map (M.get · b) 
+    |> (List.countUntil · height)
+  let xgt : Nat := Fin.gt a |>.map (M.get · b) |>.reverse
+    |> (List.countUntil · height)
+  let ylt : Nat := Fin.lt b |>.map (M.get a ·) 
+    |> (List.countUntil · height)
+  let ygt : Nat := Fin.gt b |>.map (M.get a ·) |>.reverse
+    |> (List.countUntil · height)
+  xlt * xgt * ylt * ygt
+
 -- This approach will probably be too slow for part 2...
 def first_part : IO Nat := do
   let data ← IO.FS.lines input
@@ -52,5 +76,14 @@ def first_part : IO Nat := do
   return map.toList.map Prod.fst |>.map (fun (a,b) => map.visible? a b)
     |>.map (if · then 1 else 0)
     |>.sum
+
+def second_part : IO Nat := do
+  let data ← IO.FS.lines input
+  let mut map : Map 99 99 := HashMap.empty
+  for hi : i in [0:99] do for hj : j in [0:99] do 
+    map := map.set ⟨i,hi.2⟩ ⟨j,hj.2⟩ data[i]!.toList[j]!.toString.toNat!
+  let some result := map.toList.map Prod.fst |>.map (fun (a,b) => map.vizScore a b)
+    |>.maximum? | panic! ""
+  return result
 
 end Day8
