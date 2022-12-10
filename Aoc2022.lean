@@ -6,3 +6,4 @@ import Aoc2022.Day05
 import Aoc2022.Day06
 import Aoc2022.Day07
 import Aoc2022.Day08
+import Aoc2022.Day09
