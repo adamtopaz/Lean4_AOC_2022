@@ -41,5 +41,3 @@ def main : IO Unit := do
   IO.println s!"Part 1: {← Day10.first_part}"
   IO.println s!"Part 2:\n{← Day10.second_part}"
   IO.println ""
-
-#eval main
